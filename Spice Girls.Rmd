@@ -1,0 +1,55 @@
+---
+title: "Spice Girls"
+author: "Abdalraheem"
+date: "12/14/2021"
+output: html_document
+---
+
+
+load dplyr library
+```{r}
+library(dplyr)
+library(tidyverse)
+```
+
+```{r}
+
+tuesdata <- tidytuesdayR::tt_load('2021-12-14')
+
+
+studio_album_tracks <- tuesdata$studio_album_tracks
+
+```
+
+```{r}
+lyrics <- tuesdata$lyrics
+related_artist <- tuesdata$related_artists
+```
+```{r}
+plot = ggplot(studio_album_tracks, aes(x = studio_album_tracks$album_release_year, y=studio_album_tracks$energy))+geom_dotplot(y=studio_album_tracks$energy)
+```
+
+## trying to redo the example from the main repo 
+```{r}
+
+# For each album, calculate mean values for dance-ability, energy, and valence
+studio_album_tracks %>%
+  group_by(album_name) %>%
+  summarise(
+    danceability_mean = mean(danceability),
+    energy_mean = mean(energy),
+    valence_mean = mean(valence)) %>%
+  ungroup() %>%
+  # Set factor levels of album_name
+  mutate(
+    album_name = factor(
+      album_name, levels = c("Spice", "Spiceworld", "Forever"))) %>%
+  arrange(album_name)
+#> # A tibble: 3 x 4
+#>   album_name danceability_mean energy_mean valence_mean
+#>   <fct>                  <dbl>       <dbl>        <dbl>
+#> 1 Spice                  0.694       0.731        0.756
+#> 2 Spiceworld             0.570       0.776        0.642
+#> 3 Forever                0.695       0.722        0.583
+```
+
